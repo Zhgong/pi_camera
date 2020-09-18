@@ -38,30 +38,26 @@ with picamera.PiCamera(resolution=RESOLUTION) as camera:
 
     while True:
 
-        if start_recording() or _first_run():
-            start = dt.datetime.now()
-            logger.info("start recording movie")
+        start = dt.datetime.now()
+        logger.info("start recording movie")
 
-            # Keep recording for 5 seconds and only then write the
-            # stream to disk
-            start = dt.datetime.now()
-            while True:
-                camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                camera.wait_recording(0.2)
+        while True:
+            camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            camera.wait_recording(0.2)
 
-                # minimum length 2 seconds # recording at least 2 seconds
-                if (dt.datetime.now() - start).seconds < 2:
-                    continue
+            # minimum length 2 seconds # recording at least 2 seconds
+            if (dt.datetime.now() - start).seconds < 2:
+                continue
 
-                if start_recording():
-                    # start recording the new movie
-                    break
+            if start_recording():
+                # start recording the new movie
+                break
 
-            # stream.copy_to('motion.h264')
-            buffer = BytesIO()
-            stream.copy_to(buffer)
-            stream.clear()
-            save.save_movie(buffer)
+        # stream.copy_to('motion.h264')
+        buffer = BytesIO()
+        stream.copy_to(buffer)
+        stream.clear()
+        save.save_movie(buffer)
 
     camera.stop_recording()
     save.exit()
