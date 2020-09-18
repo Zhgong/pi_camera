@@ -3,16 +3,24 @@ import random
 import picamera
 from io import BytesIO
 import datetime as dt
+import logging
+FORMAT = '%(asctime)-15s %(message)s'
+logging.basicConfig(format=FORMAT)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.info("start")
+
+RESOLUTION=(1280, 720)
 
 def save_movie(buffer:BytesIO):
     now = dt.datetime.now()
     last_minute = now.minute - 1
     if last_minute < 0:
         last_minute = 59
-    print(f"Saving movie {last_minute} ....")
+    logger.info(f"Saving movie {last_minute} ....")
     with open(f'motion_{last_minute}.h264', "wb") as f:
         f.write(buffer.getbuffer())
-    print(f"movie {last_minute} saved.")
+    logger.info(f"movie {last_minute} saved.")
 
 def start_recording():
         # from 59 to 0
@@ -26,8 +34,8 @@ def motion_detected():
     
     return random.randint(0, 10) == 0
 
-with picamera.PiCamera() as camera:
-    camera.annotate_text = 'Hello world!'
+with picamera.PiCamera(resolution=RESOLUTION) as camera:
+    logger.info("Start of Script")
     stream = picamera.PiCameraCircularIO(camera, seconds=20)
     camera.start_recording(stream, format='h264')
     camera.wait_recording(1)
@@ -36,7 +44,7 @@ with picamera.PiCamera() as camera:
         
         if start_recording():
             start = dt.datetime.now()
-            print("start recording movie")
+            logger.info("start recording movie")
             
             # Keep recording for 5 seconds and only then write the
             # stream to disk
