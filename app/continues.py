@@ -35,8 +35,8 @@ with picamera.PiCamera() as camera:
     while True:
         
         if start_recording():
+            start = dt.datetime.now()
             print("start recording movie")
-            camera.wait_recording(2) # recording at least 2 secons
             
             # Keep recording for 5 seconds and only then write the
             # stream to disk
@@ -44,6 +44,11 @@ with picamera.PiCamera() as camera:
             while True:
                 camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 camera.wait_recording(0.2)
+
+                # minimum length 2 seconds # recording at least 2 seconds
+                if (dt.datetime.now() - start).seconds < 2:
+                    continue
+
                 if start_recording():
                     # start recording the new movie
                     break
