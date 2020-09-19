@@ -64,11 +64,11 @@ def _check_dsk_usage():
 def _loop():
     while not _EXIT:
         _check_dsk_usage()
-        if len(_MOVIE_FILES) > 0:
-            _check_path()
+        _check_path()
+        while len(_MOVIE_FILES) > 0:
             buffer = _MOVIE_FILES.pop(0)
             _save_movie(buffer)
-        sleep(0.1)
+        sleep(0.2)
 
 
 _THREAD = Thread(target=_loop, args=())
