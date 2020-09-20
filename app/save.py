@@ -31,15 +31,13 @@ def save_movie(buffer: BytesIO):
 
 def _save_movie(buffer: BytesIO):
     now = dt.datetime.now()
-    last_minute = now.minute - 1
-    if last_minute < 0:
-        last_minute = 59
-    logger.info(f"Saving movie {last_minute} ....")
+    last_time = now - dt.timedelta(minutes=1)
+    logger.info(f"Saving movie {last_time.minute} ....")
 
-    file_name = f'{_PATH}/{now.year}-{now.month}-{now.day}_{now.hour}_{last_minute}.h264'
+    file_name = f'{_PATH}/{last_time.year}-{last_time.month}-{last_time.day}_{last_time.hour}_{last_time.minute}.h264'
     with open(file_name, "wb") as f:
         f.write(buffer.getbuffer())
-    logger.info(f"movie {last_minute} saved.")
+    logger.info(f"movie {last_time.minute} saved.")
 
 def _disk_full():
     """if the rest space of disk small as 100 M"""
