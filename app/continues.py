@@ -1,4 +1,3 @@
-import random
 import picamera
 from io import BytesIO
 import datetime as dt
