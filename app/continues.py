@@ -16,6 +16,8 @@ RESOLUTION = (1280, 720)
 FIRST_RUN = True
 _EXIT = False
 BUFFER_SIZE = 65 # seconds
+FRAME_RATE = 30
+_MINIMUM_MOVIE_LENGTH = 2 # minimum length of movie
 
 def _first_run():
     global FIRST_RUN
@@ -41,7 +43,7 @@ def exit():
     global _EXIT
     _EXIT = False
 
-with picamera.PiCamera(resolution=RESOLUTION) as camera:
+with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
     logger.info("Start of Script")
     stream = picamera.PiCameraCircularIO(camera, seconds=BUFFER_SIZE)
     camera.start_recording(stream, format='h264')
@@ -57,8 +59,9 @@ with picamera.PiCamera(resolution=RESOLUTION) as camera:
         logger.info("start recording movie")
 
         while True:
+            
             # minimum length 2 seconds # recording at least 2 seconds
-            if (dt.datetime.now() - start).seconds < 2:
+            if (dt.datetime.now() - start).seconds < _MINIMUM_MOVIE_LENGTH:
                 continue
 
             if start_recording():
