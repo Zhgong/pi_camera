@@ -2,6 +2,8 @@ import picamera
 from io import BytesIO
 import datetime as dt
 import logging
+
+from picamera.camera import PiCamera
 import save
 from threading import Thread
 
@@ -82,9 +84,9 @@ def loop(camera:picamera.PiCamera):
     exit()
     t.join()
 
-def main():
-    with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
-        loop(camera)    
+def main(camera:picamera.PiCamera):
+    loop(camera)
 
 if __name__ == "__main__":
-    main()
+    with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
+        main(camera)
