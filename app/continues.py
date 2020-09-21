@@ -45,7 +45,7 @@ def exit():
     _EXIT = False
 
 def loop(camera:picamera.PiCamera):
-    
+
     logger.info("Start of Script")
     stream = picamera.PiCameraCircularIO(camera, seconds=BUFFER_SIZE)
     camera.start_recording(stream, format='h264')
@@ -82,5 +82,9 @@ def loop(camera:picamera.PiCamera):
     exit()
     t.join()
 
-with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
-    loop(camera)    
+def main():
+    with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
+        loop(camera)    
+
+if __name__ == "__main__":
+    main()
