@@ -2,6 +2,7 @@ import picamera
 from io import BytesIO
 import datetime as dt
 import logging
+import camera
 
 from picamera.camera import PiCamera
 import save
@@ -13,11 +14,9 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.info("start")
 
-RESOLUTION = (1280, 720)
 FIRST_RUN = True
 _EXIT = False
 BUFFER_SIZE = 65 # seconds
-FRAME_RATE = 30
 _MINIMUM_MOVIE_LENGTH = 2 # minimum length of movie
 
 stream = None
@@ -88,5 +87,4 @@ def main(camera:picamera.PiCamera):
     loop(camera)
 
 if __name__ == "__main__":
-    with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
-        main(camera)
+    main(camera.camera)
