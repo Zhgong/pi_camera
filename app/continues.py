@@ -2,7 +2,7 @@ import picamera
 from io import BytesIO
 import datetime as dt
 import logging
-import camera
+
 
 from picamera.camera import PiCamera
 import save
@@ -83,8 +83,9 @@ def loop(camera:picamera.PiCamera):
     exit()
     t.join()
 
-def main(camera:picamera.PiCamera):
-    loop(camera)
+def main():
+    import camera
+    loop(camera.camera)
 
 if __name__ == "__main__":
-    main(camera.camera)
+    main()
