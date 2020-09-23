@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 picamera = "*"
 flask = "*"
+pillow = "*"
 
 [dev-packages]
 autopep8 = "*"

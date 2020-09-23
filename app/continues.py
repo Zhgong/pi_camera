@@ -1,8 +1,10 @@
-import random
 import picamera
 from io import BytesIO
 import datetime as dt
 import logging
+
+
+from picamera.camera import PiCamera
 import save
 from threading import Thread
 
@@ -12,12 +14,12 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.info("start")
 
-RESOLUTION = (1280, 720)
 FIRST_RUN = True
 _EXIT = False
 BUFFER_SIZE = 65 # seconds
-FRAME_RATE = 30
 _MINIMUM_MOVIE_LENGTH = 2 # minimum length of movie
+
+stream = None
 
 def _first_run():
     global FIRST_RUN
@@ -43,7 +45,8 @@ def exit():
     global _EXIT
     _EXIT = False
 
-with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
+def loop(camera:picamera.PiCamera):
+
     logger.info("Start of Script")
     stream = picamera.PiCameraCircularIO(camera, seconds=BUFFER_SIZE)
     camera.start_recording(stream, format='h264')
@@ -79,3 +82,10 @@ with picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE) as camera:
     save.exit()
     exit()
     t.join()
+
+def main():
+    import camera
+    loop(camera.camera)
+
+if __name__ == "__main__":
+    main()
