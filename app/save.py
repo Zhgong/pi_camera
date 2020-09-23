@@ -16,6 +16,7 @@ _MAX_QUEE_SIZE = 100
 _THREAD = None
 _EXIT = False
 _PATH = "movie"
+_MINIMUM_FREE_SPACE = 500 # MB. minimum free space of disk
 
 def _check_path():
     """Creating path if not exists"""
@@ -40,9 +41,9 @@ def _save_movie(buffer: BytesIO):
     logger.info(f"movie {last_time.minute} saved.")
 
 def _disk_full():
-    """if the rest space of disk small as 100 M"""
+    """if the rest space of disk small as x M"""
     dsk_usg = shutil.disk_usage("/")
-    return (dsk_usg.free/1024/1024) <100 
+    return (dsk_usg.free/1024/1024) <_MINIMUM_FREE_SPACE
 
 def _check_dsk_usage():
     """Remove the oldest files if the disk is out of use"""
