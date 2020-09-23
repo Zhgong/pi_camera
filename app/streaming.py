@@ -3,6 +3,8 @@ import io
 from time import sleep
 import logging
 
+from flask.json import jsonify
+import camera
 import continues
 from threading import Thread
 
@@ -25,7 +27,6 @@ def index():
 
 
 def gen():
-    import camera
     yield from stream(camera.camera)
 
 
@@ -39,6 +40,12 @@ def stream(camera):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         sleep(1/25)
 
+@app.route("/camera/rotate")
+def camera_rotate():
+    previous_rotation = camera.camera.rotation 
+    camera.camera.rotation += 90
+    return jsonify({"status":"success", "previous_rotation":previous_rotation, "current_rotation": camera.camera.rotation})
+    
 
 @app.route('/video_feed')
 def video_feed():
