@@ -11,9 +11,10 @@ camera = None
 def load_config():
     global RESOLUTION, FRAME_RATE, camera
     configuration = config.load()
-    configuration["resolution"] = "x".join([str(x) for x in RESOLUTION])
-    RESOLUTION = tuple([int(i) for i in configuration["resolution"].split("x")])
-    FRAME_RATE = configuration["framerate"]
+    if configuration:
+        RESOLUTION = tuple([int(i) for i in configuration["resolution"].split("x")])
+        FRAME_RATE = configuration["framerate"]
+
     camera = picamera.PiCamera(resolution=RESOLUTION, framerate=FRAME_RATE)
     camera.rotation = configuration.get("rotation") or 0
     camera.annotate_background = picamera.Color('grey')
