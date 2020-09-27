@@ -7,6 +7,7 @@ from threading import Thread
 from time import sleep
 import os
 import shutil
+import subprocess
 
 
 logger = logging.getLogger()
@@ -16,12 +17,14 @@ _MAX_QUEE_SIZE = 100
 _THREAD = None
 _EXIT = False
 _PATH = "movie"
-_MINIMUM_FREE_SPACE = 500 # MB. minimum free space of disk
+_MINIMUM_FREE_SPACE = 500  # MB. minimum free space of disk
+
 
 def _check_path():
     """Creating path if not exists"""
     if not os.path.exists(_PATH):
         os.mkdir(_PATH)
+
 
 def save_movie(buffer: BytesIO):
     """Append movies to buffer"""
@@ -39,11 +42,26 @@ def _save_movie(buffer: BytesIO):
     with open(file_name, "wb") as f:
         f.write(buffer.getbuffer())
     logger.info(f"movie {last_time.minute} saved.")
+    return file_name
+
+
+def _convert_to_mp4(filename: str):
+    # MP4Box -add movie/2020-9-27_23_56.h264 movie/2020-9-27_23_56.mp4
+    convert = subprocess.run(
+        ["MP4Box", "-add", filename, filename.replace("h264", "mp4")])
+
+    logger.info(f"Converting function with return code: {convert.returncode}")
+    
+    # delete the h264 file
+    if convert.returncode == 0:
+        os.remove(filename)
+
 
 def _disk_full():
     """if the rest space of disk small as x M"""
     dsk_usg = shutil.disk_usage("/")
-    return (dsk_usg.free/1024/1024) <_MINIMUM_FREE_SPACE
+    return (dsk_usg.free/1024/1024) < _MINIMUM_FREE_SPACE
+
 
 def _check_dsk_usage():
     """Remove the oldest files if the disk is out of use"""
@@ -66,7 +84,8 @@ def _loop():
         _check_path()
         while len(_MOVIE_FILES) > 0:
             buffer = _MOVIE_FILES.pop(0)
-            _save_movie(buffer)
+            h264_file = _save_movie(buffer)
+            _convert_to_mp4(h264_file)
         sleep(0.2)
 
 

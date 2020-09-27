@@ -59,7 +59,7 @@ def loop(camera:picamera.PiCamera):
     while True:
 
         start = dt.datetime.now()
-        logger.info("start recording movie")
+        logger.info(f"start recording movie {start.minute}")
 
         while True:
             
