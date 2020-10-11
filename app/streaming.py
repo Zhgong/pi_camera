@@ -52,6 +52,9 @@ def video_feed():
     return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/config')
+def get_config():
+    return jsonify(camera.configuration)
 
 def run():
     t_continues = Thread(target=continues.main, args=())

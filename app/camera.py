@@ -6,10 +6,11 @@ RESOLUTION = (1280, 720)
 FRAME_RATE = 30
 
 camera = None
+configuration = None
 
 
 def load_config():
-    global RESOLUTION, FRAME_RATE, camera
+    global RESOLUTION, FRAME_RATE, camera, configuration
     configuration = config.load()
     if configuration:
         RESOLUTION = tuple([int(i) for i in configuration["resolution"].split("x")])
@@ -19,11 +20,13 @@ def load_config():
     camera.rotation = configuration.get("rotation") or 0
     camera.annotate_background = picamera.Color('grey')
 
-def save_config():
-    configuration = dict()
+    
     configuration["resolution"] = "x".join([str(x) for x in RESOLUTION])
     configuration["framerate"] = FRAME_RATE
     configuration["rotation"] = camera.rotation
+
+def save_config():
+    global configuration
     config.save(configuration)
 
 
