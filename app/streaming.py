@@ -1,10 +1,7 @@
-from flask import Flask, render_template, Response
-import io
-from time import sleep
+from flask import render_template, Response
 import logging
 
 from flask.json import jsonify
-import camera
 import continues
 from threading import Thread
 from api import app
