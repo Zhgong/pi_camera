@@ -10,6 +10,7 @@ pillow = "*"
 dash = "*"
 plotly = "*"
 pandas = "*"
+requests = "*"
 
 [dev-packages]
 autopep8 = "*"

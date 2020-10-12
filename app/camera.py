@@ -29,5 +29,7 @@ def save_config():
     global configuration
     config.save(configuration)
 
+def get_config():
+    return configuration
 
 load_config()
