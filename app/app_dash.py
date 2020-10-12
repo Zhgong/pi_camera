@@ -26,7 +26,9 @@ app.layout = html.Div([
         dcc.Input(
             id='ratation',
             type='number',
-            placeholder='input rotation'
+            placeholder='input rotation',
+            value=90,
+            debounce=True
         ),
 
 
@@ -55,7 +57,8 @@ def send(n_clicks):
     Output('placeholder', 'children'),
     Input('ratation', 'value'))
 def rotation(value):
-        print(value)
+        result = requests.post('http://localhost:8050/config', json={'rotation':value})
+        print(result.text)
         return value
 
 if __name__ == '__main__':

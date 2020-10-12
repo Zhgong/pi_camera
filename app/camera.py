@@ -32,4 +32,8 @@ def save_config():
 def get_config():
     return configuration
 
+def set_config(config):
+    print(config)
+    camera.rotation = config.get("rotation") or camera.rotation
+
 load_config()

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 import io
 from time import sleep
 import logging
@@ -43,8 +43,12 @@ def video_feed():
     return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/config')
+@app.route('/config', methods=['GET', 'POST'])
 def config():
-    return jsonify(camera.get_config())
+    if request.method == 'GET':
+        return jsonify(camera.get_config())
+    elif request.method == 'POST':
+        camera.set_config(request.json)
+        return jsonify({'status':'ok'})
 
 
