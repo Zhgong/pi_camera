@@ -3,7 +3,7 @@ Description=My Camera eye
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 -u app/streaming.py
+ExecStart=/home/pi/pi_camera/venv/bin/python3 -u app/streaming.py
 WorkingDirectory=/home/pi/pi_camera
 StandardOutput=inherit
 StandardError=inherit

@@ -1,6 +1,8 @@
 # pi_camera
 Controlling camera on raspberry pi
 
+> `sudo apt install -y gpac`
+
 ## How to use
 ```bash
 $ sudo cp cameraeye.service /etc/systemd/system/

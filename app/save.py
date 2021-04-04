@@ -94,6 +94,7 @@ _THREAD.start()
 
 
 def exit():
+    global _EXIT
     _EXIT = True
     _THREAD.join()
 
