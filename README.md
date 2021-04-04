@@ -1,6 +1,7 @@
 # pi_camera
 Controlling camera on raspberry pi
 
+You need the MP4box to convert .h264 to .mp4 file
 > `sudo apt install -y gpac`
 
 ## How to use

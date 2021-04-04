@@ -25,5 +25,5 @@ def load():
 
 
 def save(configuration):
-    with open(abs_file) as f:
-        json.dump(f,configuration, indent=2)
+    with open(abs_file, "w") as f:
+        json.dump(configuration,f, indent=2)

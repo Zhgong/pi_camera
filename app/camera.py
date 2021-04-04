@@ -27,6 +27,7 @@ def load_config():
 
 def save_config():
     global configuration
+    print(configuration)
     config.save(configuration)
 
 def get_config():
@@ -35,5 +36,25 @@ def get_config():
 def set_config(config):
     print(config)
     camera.rotation = config.get("rotation") or camera.rotation
+
+def set_rotation(rotation):
+    print(f"previous rotation: {camera.rotation}")
+    camera.rotation = rotation
+    configuration["rotation"] = camera.rotation
+    print(f"New rotation: {camera.rotation}")
+
+
+def set_framerate(framerate):
+    print(f"previous framerate: {camera.framerate}")
+    camera.framerate = framerate
+    configuration["framerate"] = camera.rotation
+    print(f"New framerate: {camera.framerate}")
+
+def set_resolution(resolution:str):
+    print(f"previous resolution: {camera.resolution}")
+    camera.resolution = tuple([int(i) for i in resolution.split("x")])
+    configuration["resolution"] = resolution
+    print(f"New resolution: {camera.resolution}")
+
 
 load_config()
