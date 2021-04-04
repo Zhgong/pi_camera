@@ -41,6 +41,8 @@ app.layout = html.Div([
             type='number',
             placeholder='input framerate',
             value=cam_config["framerate"],
+            min=1,
+            max=30,
             debounce=True
         ),
 

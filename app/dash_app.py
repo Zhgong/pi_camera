@@ -1,25 +1,13 @@
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-from api import app as server
+from threading import Thread
+import continues
+from app_dash import app
 
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server)
-
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
-
-    html.Div(children='''
-        Dash: A web application framework for Python.6
-    '''),
-    html.Img(src="/video_feed")
-
-
-    
-])
+def run():
+    t_continues = Thread(target=continues.main, args=())
+    t_continues.start()
+    app.run_server(host='0.0.0.0', debug=False)
+    t_continues.join()
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    run()
