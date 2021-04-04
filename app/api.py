@@ -5,9 +5,6 @@ import logging
 
 from flask.json import jsonify
 import camera
-import continues
-from threading import Thread
-
 
 from picamera import exc
 logger = logging.getLogger()
