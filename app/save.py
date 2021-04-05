@@ -1,8 +1,6 @@
 import datetime as dt
 from io import BytesIO
 import logging
-from logging import log
-from shutil import disk_usage
 from threading import Thread
 from time import sleep
 import os
@@ -89,14 +87,23 @@ def _loop():
         sleep(0.2)
 
 
-_THREAD = Thread(target=_loop, args=())
-_THREAD.start()
+_THREAD = None # thread object for saving
 
 
-def exit():
+def stop():
     global _EXIT
     _EXIT = True
     _THREAD.join()
+
+
+def start():
+    global _THREAD
+    if _THREAD is None or not _THREAD.is_alive():
+        _THREAD = Thread(target=_loop, args=())
+        _THREAD.start()
+        print(f"thread {_THREAD} has been created")
+    else:
+        print(f"thread {_THREAD} exists and is alive")
 
 
 _check_path()

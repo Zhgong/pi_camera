@@ -2,6 +2,9 @@ import picamera
 from io import BytesIO
 import datetime as dt
 import logging
+from threading import Thread
+import time
+
 
 
 from picamera.camera import PiCamera
@@ -21,6 +24,10 @@ _MINIMUM_MOVIE_LENGTH = 2 # minimum length of movie
 
 stream = None
 
+local_threads = []
+
+_THREAD = None # Main thread
+
 def _first_run():
     global FIRST_RUN
     if FIRST_RUN:
@@ -30,7 +37,7 @@ def _first_run():
         return False
 
 
-def start_recording():
+def is_start_of_new_minute():
     # from 59 to 0
     now = dt.datetime.now()
     if now.second == 0:
@@ -41,33 +48,37 @@ def add_timestamp(camera:picamera.PiCamera):
         camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         camera.wait_recording(0.2)
 
-def exit():
+def local_exit():
     global _EXIT
-    _EXIT = False
+    _EXIT = True
+    for t in local_threads:
+        t.join()
 
 def loop(camera:picamera.PiCamera):
-
+    global local_threads, state
     logger.info("Start of Script")
     stream = picamera.PiCameraCircularIO(camera, seconds=BUFFER_SIZE)
     camera.start_recording(stream, format='h264')
 
     t = Thread(target=add_timestamp, args=(camera,))
     t.start()
+    local_threads.append(t)
+
 
     camera.wait_recording(1)
 
-    while True:
+    while not _EXIT:
 
         start = dt.datetime.now()
         logger.info(f"start recording movie {start.minute}")
 
-        while True:
+        while not _EXIT:
             
             # minimum length 2 seconds # recording at least 2 seconds
             if (dt.datetime.now() - start).seconds < _MINIMUM_MOVIE_LENGTH:
                 continue
 
-            if start_recording():
+            if is_start_of_new_minute():
                 # start recording the new movie
                 break
             camera.wait_recording(0.1)
@@ -78,14 +89,35 @@ def loop(camera:picamera.PiCamera):
         stream.clear()
         save.save_movie(buffer)
 
+    print("stopping camera")
     camera.stop_recording()
-    save.exit()
-    exit()
+    save.stop()
+    local_exit()
     t.join()
+    state = "STOP"
 
 def main():
     import camera
+    save.start()
     loop(camera.camera)
+
+
+def start_thread():
+    global _THREAD
+    if _THREAD is None or not _THREAD.is_alive():
+        _THREAD = Thread(target=main, args=())
+        _THREAD.start()
+        print(f"thread {_THREAD} has been created")
+    else:
+        print(f"thread {_THREAD} exists and is alive")
+
+    
+    return _THREAD
+
+def stop_recording():
+    local_exit()
+    save.stop()
+        
 
 if __name__ == "__main__":
     main()

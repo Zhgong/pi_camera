@@ -38,10 +38,14 @@ def set_config(config):
     camera.rotation = config.get("rotation") or camera.rotation
 
 def set_rotation(rotation):
-    print(f"previous rotation: {camera.rotation}")
-    camera.rotation = rotation
-    configuration["rotation"] = camera.rotation
-    print(f"New rotation: {camera.rotation}")
+    try:
+        print(f"previous rotation: {camera.rotation}")
+        camera.rotation = rotation
+        configuration["rotation"] = camera.rotation
+        print(f"New rotation: {camera.rotation}")
+        return camera.rotation
+    except Exception as e:
+        return str(e)
 
 
 def set_framerate(framerate):

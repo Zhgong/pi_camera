@@ -5,6 +5,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from api import app as server
 import camera
+import continues
 # import requests
 import json
 
@@ -54,6 +55,9 @@ app.layout = html.Div([
 
         html.Button('Save', id='btn-send', n_clicks=0),
     ], style={'width': '300px', 'float': 'left'}),
+
+    html.Button('Stop recording', id='stop-recording', n_clicks=0),
+
     html.Div([
         html.Img(id='img', src='/video_feed',
                  style={'width': '50%', 'hight': '50%'}),
@@ -61,7 +65,8 @@ app.layout = html.Div([
 
     html.Div(id='placeholder'),
     html.Div(id='placeholder2'),
-    html.Div(id='placeholder3')
+    html.Div(id='placeholder3'),
+    html.Div(id='placeholder4')
 ])
 
 
@@ -73,13 +78,24 @@ def send(n_clicks):
     camera.save_config()
     return 0
 
+@app.callback(
+    Output('placeholder4', 'value'),
+    Input('stop-recording', 'n_clicks')
+)
+def stop_recording(n_clicks):
+    
+    if n_clicks==0: # do not fire call back while loading the page
+        return None
+    print("btn-stop clicked")
+    return continues.stop_recording()
+
 
 @app.callback(
     Output('placeholder', 'children'),
     Input('rotation', 'value'))
 def rotation(value):
-    camera.set_rotation(value)
-    return value
+    return camera.set_rotation(value)
+
 
 
 @app.callback(
