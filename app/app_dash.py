@@ -76,11 +76,10 @@ app.layout = html.Div([
     Input('btn-save', 'n_clicks'),
     State('rotation', 'value'),
     State('resolution', 'value'),
-    State('framerate', 'value')
+    State('framerate', 'value'),
+    prevent_initial_call=True
 )
 def save(n_clicks, rotation, resolution, framerate):
-    if n_clicks==0: # do not fire call back while loading the page
-        return None
     return dash2recording.save_config({
             "rotation":rotation, 
             "resolution":resolution, 
