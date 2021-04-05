@@ -8,7 +8,7 @@ import time
 
 
 from picamera.camera import PiCamera
-import save
+import saver
 from threading import Thread
 
 FORMAT = '[%(asctime)-15s] %(levelname)-4s %(filename)s:%(funcName)s:%(lineno)d: %(message)s'
@@ -89,7 +89,7 @@ def loop(camera:picamera.PiCamera):
         buffer = BytesIO()
         stream.copy_to(buffer)
         stream.clear()
-        save.save_movie(buffer)
+        saver.save_movie(buffer)
 
     print("stopping camera")
     camera.stop_recording()
@@ -99,7 +99,7 @@ def loop(camera:picamera.PiCamera):
 def main():
     logger.info("start")
     import camera
-    save.start()
+    saver.start()
     loop(camera.camera)
 
 
@@ -118,7 +118,7 @@ def start_thread():
 
 def stop_recording():
     local_exit()
-    save.stop()
+    saver.stop()
 
         
 

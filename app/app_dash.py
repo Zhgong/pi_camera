@@ -25,9 +25,9 @@ styles = {
 }
 
 available_resolutions = ["640x480", "1024x768", "1280x720"]
-
+app.title = "Cameraeye"
 app.layout = html.Div([
-    html.H1('Raspberry Pi Camera'),
+    html.H1('Raspberry Pi Camera eye'),
     html.Div([
 
         dcc.Input(

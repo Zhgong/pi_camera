@@ -1,6 +1,5 @@
 import continues
 import camera
-import time
 
 def save_config(config):
     """
