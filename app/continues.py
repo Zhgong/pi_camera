@@ -11,11 +11,13 @@ from picamera.camera import PiCamera
 import save
 from threading import Thread
 
-FORMAT = '%(asctime)-15s %(message)s'
+FORMAT = '[%(asctime)-15s] %(levelname)-4s %(filename)s:%(funcName)s:%(lineno)d: %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-logger.info("start")
+
+print = logging.info
+
 
 FIRST_RUN = True
 _EXIT = False
@@ -91,32 +93,33 @@ def loop(camera:picamera.PiCamera):
 
     print("stopping camera")
     camera.stop_recording()
-    save.stop()
-    local_exit()
-    t.join()
-    state = "STOP"
+
+
 
 def main():
+    logger.info("start")
     import camera
     save.start()
     loop(camera.camera)
 
 
 def start_thread():
-    global _THREAD
+    global _THREAD, _EXIT, local_threads
+    local_threads = []
+    _EXIT = False
     if _THREAD is None or not _THREAD.is_alive():
         _THREAD = Thread(target=main, args=())
         _THREAD.start()
         print(f"thread {_THREAD} has been created")
     else:
         print(f"thread {_THREAD} exists and is alive")
-
-    
+    local_threads.append(_THREAD)
     return _THREAD
 
 def stop_recording():
     local_exit()
     save.stop()
+
         
 
 if __name__ == "__main__":

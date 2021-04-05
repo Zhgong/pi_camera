@@ -2,12 +2,13 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from api import app as server
 import camera
 import continues
 # import requests
 import json
+import dash2recording
 
 cam_config = camera.get_config()
 
@@ -26,7 +27,7 @@ styles = {
 available_resolutions = ["640x480", "1024x768", "1280x720"]
 
 app.layout = html.Div([
-    html.H1('Dash Camera'),
+    html.H1('Raspberry Pi Camera'),
     html.Div([
 
         dcc.Input(
@@ -53,10 +54,10 @@ app.layout = html.Div([
             value=cam_config["resolution"]
         ),
 
-        html.Button('Save', id='btn-send', n_clicks=0),
+        html.Button('Save', id='btn-save', n_clicks=0),
     ], style={'width': '300px', 'float': 'left'}),
 
-    html.Button('Stop recording', id='stop-recording', n_clicks=0),
+
 
     html.Div([
         html.Img(id='img', src='/video_feed',
@@ -72,47 +73,23 @@ app.layout = html.Div([
 
 @app.callback(
     Output('placeholder', 'value'),
-    Input('btn-send', 'n_clicks')
+    Input('btn-save', 'n_clicks'),
+    State('rotation', 'value'),
+    State('resolution', 'value'),
+    State('framerate', 'value')
 )
-def send(n_clicks):
-    camera.save_config()
-    return 0
-
-@app.callback(
-    Output('placeholder4', 'value'),
-    Input('stop-recording', 'n_clicks')
-)
-def stop_recording(n_clicks):
-    
+def save(n_clicks, rotation, resolution, framerate):
     if n_clicks==0: # do not fire call back while loading the page
         return None
-    print("btn-stop clicked")
-    return continues.stop_recording()
+    return dash2recording.save_config({
+            "rotation":rotation, 
+            "resolution":resolution, 
+            "framerate":framerate
+            })
 
-
-@app.callback(
-    Output('placeholder', 'children'),
-    Input('rotation', 'value'))
-def rotation(value):
-    return camera.set_rotation(value)
-
-
-
-@app.callback(
-    Output('placeholder1', 'children'),
-    Input('framerate', 'value'))
-def rotation(value):
-    camera.set_framerate(value)
-    return value
-
-
-@app.callback(
-    Output('placeholder2', 'children'),
-    Input('resolution', 'value'))
-def rotation(value):
-    camera.set_resolution(value)
-    return value
 
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', debug=False)
+    app.run_server(host='0.0.0.0', port=80, debug=False)
+
+

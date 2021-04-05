@@ -101,9 +101,9 @@ def start():
     if _THREAD is None or not _THREAD.is_alive():
         _THREAD = Thread(target=_loop, args=())
         _THREAD.start()
-        print(f"thread {_THREAD} has been created")
+        logger.info(f"thread {_THREAD} has been created")
     else:
-        print(f"thread {_THREAD} exists and is alive")
+        logger.info(f"thread {_THREAD} exists and is alive")
 
 
 _check_path()
