@@ -12,7 +12,7 @@ logger = logging.getLogger()
 
 _MOVIE_FILES = list()
 _MAX_QUEE_SIZE = 100
-_THREAD = None
+_THREAD = None # thread object for saving
 _EXIT = False
 _PATH = "movie"
 _MINIMUM_FREE_SPACE = 500  # MB. minimum free space of disk
@@ -87,8 +87,6 @@ def _loop():
         sleep(0.2)
 
 
-_THREAD = None # thread object for saving
-
 
 def stop():
     global _EXIT
@@ -97,7 +95,8 @@ def stop():
 
 
 def start():
-    global _THREAD
+    global _THREAD, _EXIT
+    _EXIT = False
     if _THREAD is None or not _THREAD.is_alive():
         _THREAD = Thread(target=_loop, args=())
         _THREAD.start()
