@@ -3,6 +3,7 @@ import json
 CONFIG_NAME = "config.json"
 dir = os.path.dirname(os.path.dirname(__file__))
 abs_file = os.path.join(dir, CONFIG_NAME)
+movie_foder = os.path.join(dir, "movie")
 
 
 

@@ -5,10 +5,8 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from api import app as server
 import camera
-import continues
-# import requests
-import json
 import dash2recording
+import config
 
 cam_config = camera.get_config()
 
@@ -55,6 +53,7 @@ app.layout = html.Div([
         ),
 
         html.Button('Save', id='btn-save', n_clicks=0),
+        html.P(f"Movie store: {config.movie_foder}"),
     ], style={'width': '300px', 'float': 'left'}),
 
 

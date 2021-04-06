@@ -41,9 +41,9 @@ def set_config(config):
     print(config)
     configuration.update(config)
     print(configuration)
-    camera.rotation = set_rotation(configuration.get("rotation"))
-    # camera.framerate = set_framerate(configuration.get("framerate"))
-    # camera.resolution = set_resolution(configuration.get("resolution"))
+    set_rotation(configuration.get("rotation"))
+    set_framerate(configuration.get("framerate"))
+    set_resolution(configuration.get("resolution"))
 
 def set_rotation(rotation):
 
@@ -57,12 +57,14 @@ def set_rotation(rotation):
 def set_framerate(framerate):
     print(f"previous framerate: {camera.framerate}")
     camera.framerate = framerate
-    configuration["framerate"] = camera.framerate
+    configuration["framerate"] = framerate
     print(f"New framerate: {camera.framerate}")
 
 def set_resolution(resolution:str):
     print(f"previous resolution: {camera.resolution}")
-    camera.resolution = tuple([int(i) for i in resolution.split("x")])
+    t_resolution = tuple([int(i) for i in resolution.split("x")])
+    print(f"resolution as tuple {t_resolution}")
+    camera.resolution = t_resolution
     configuration["resolution"] = resolution
     print(f"New resolution: {camera.resolution}")
 
