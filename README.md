@@ -24,3 +24,5 @@ $ sudo systemctl enable cameraeye
 $ sudo systemctl status cameraeye
 ```
 
+## acess the camera on web
+><ip>:8080
