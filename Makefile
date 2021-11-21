@@ -12,6 +12,8 @@ service:
 
 enable:
 	sudo systemctl enable camera
+disable:
+	sudo systemctl disable camera
 
 start:
 	sudo systemctl start camera
@@ -29,6 +31,6 @@ reload:
 	sudo systemctl daemon-reload
 	sudo systemctl reload-or-restart camera
 
-clean:
+clean: disable
 	rm -rf venv
 	sudo rm -f /etc/systemd/system/$(FILE)
