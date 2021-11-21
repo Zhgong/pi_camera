@@ -4,12 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-picamera = "*"
-flask = "*"
-pillow = "*"
+streamlit = "*"
 
 [dev-packages]
-autopep8 = "*"
+mypy = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
