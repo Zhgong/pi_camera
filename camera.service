@@ -1,0 +1,14 @@
+[Unit]
+Description=My Camera
+After=network.target
+
+[Service]
+ExecStart=/bin/bash -c "cd /home/ubuntu/pi_camera && source venv/bin/activate && streamlit run main.py"
+WorkingDirectory=/home/ubuntu/pi_camera
+StandardOutput=inherit
+StandardError=inherit
+Restart=on-failure
+User=ubuntu
+
+[Install]
+WantedBy=multi-user.target
