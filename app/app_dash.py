@@ -7,8 +7,16 @@ from api import app as server
 import camera
 import dash2recording
 import config
+import logging
 
 cam_config = camera.get_config()
+
+def update_config():
+    """update camera config"""
+    global cam_config
+    cam_config = camera.get_config()
+    logging.info(cam_config)
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -50,10 +58,16 @@ app.layout = html.Div([
             id='resolution',
             options=[{'label': i, 'value': i} for i in available_resolutions],
             value=cam_config["resolution"]
+            debounce=True
         ),
 
         html.Button('Save', id='btn-save', n_clicks=0),
         html.P(f"Movie store: {config.movie_foder}"),
+        dcc.Loading(
+            id="loading-1",
+            type="default",
+            children=html.Div(id="loading-save")
+        ),
     ], style={'width': '300px', 'float': 'left'}),
 
 
@@ -71,7 +85,7 @@ app.layout = html.Div([
 
 
 @app.callback(
-    Output('placeholder', 'value'),
+    Output('loading-save', 'children'),
     Input('btn-save', 'n_clicks'),
     State('rotation', 'value'),
     State('resolution', 'value'),
@@ -79,11 +93,13 @@ app.layout = html.Div([
     prevent_initial_call=True
 )
 def save(n_clicks, rotation, resolution, framerate):
-    return dash2recording.save_config({
-            "rotation":rotation, 
-            "resolution":resolution, 
-            "framerate":framerate
-            })
+    dash2recording.save_config({
+        "rotation":rotation, 
+        "resolution":resolution, 
+        "framerate":framerate
+        })
+        
+    update_config()
 
 
 
