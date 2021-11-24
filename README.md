@@ -1,33 +1,30 @@
-# pi_camera
-Controlling camera on raspberry pi with streamlit
+## Use ffmpeg and Nginx to stream video
 
-## How to use
-```bash
-$ sudo cp cameraeye.service /etc/systemd/system/
+# change add name to hosts
+rtmp-postbird
+
+
+
+```
+ffmpeg -f v4l2  -framerate 25 -video_size 640x480 -i  /dev/video0 -strict -2 -vcodec libx264 -acodec libvo_aacenc  -f flv rtmp://localhost/live/
 ```
 
-## run
-```bash
-$ sudo systemctl start cameraeye
+
+```
+rtmp {                
+    server {
+        listen 1935;  #服务端口--默认
+        chunk_size 4096;   #数据传输块的大小--默认
+        #设置直播的application名称是 live
+    application live{ 
+        live on; #live on表示开启直播模式
+        }
+        #设置推流的应用名称
+    application push{ 
+        live on; #开启直播
+        push rtmp://rtmp-postbird/live; #推流到上面的直播应用
+        }
+    }
+}
 ```
 
-## run at start up
-```bash
-$ sudo systemctl enable cameraeye
-```
-
-## check log
-```bash
-$ sudo systemctl status cameraeye
-```
-
-## Streamlit works with following system
-```
-Ubuntu 20.04.3 LTS
-Linux ubuntu-pi-cam-211121 5.4.0-1046-raspi #50-Ubuntu SMP PREEMPT Thu Oct 28 05:32:10 UTC 2021 aarch64 aarch64 aarch64 GNU/Linux
-```
-
-## install opencv on Raspberry pi
->`sudo apt install python3-opencv`
->
->`pip install opencv-contrib-python`
