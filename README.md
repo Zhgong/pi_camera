@@ -26,3 +26,8 @@ $ sudo systemctl status cameraeye
 Ubuntu 20.04.3 LTS
 Linux ubuntu-pi-cam-211121 5.4.0-1046-raspi #50-Ubuntu SMP PREEMPT Thu Oct 28 05:32:10 UTC 2021 aarch64 aarch64 aarch64 GNU/Linux
 ```
+
+## install opencv on Raspberry pi
+>`sudo apt install python3-opencv`
+>
+>`pip install opencv-contrib-python`
